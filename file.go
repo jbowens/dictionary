@@ -36,8 +36,5 @@ func Load(filename string) (Interface, error) {
 		return nil, err
 	}
 
-	dict := sortedSlice(strings.Split(string(b), "\n"))
-	dict.sortIfNecessary()
-
-	return dict, nil
+	return WithWords(strings.Split(string(b), "\n")...), nil
 }
