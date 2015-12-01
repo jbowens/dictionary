@@ -1,3 +1,4 @@
+// Package dictionary provides utilities for working with dictionary words.
 package dictionary
 
 // Interface defines the interface that all dictionaries implement.

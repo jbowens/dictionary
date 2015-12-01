@@ -2,6 +2,7 @@ package dictionary
 
 import "unicode/utf8"
 
+// BuildPrefixTree contructs a new prefix tree from the provided dictionary.
 func BuildPrefixTree(d Interface) *PrefixTree {
 	var root PrefixTree
 	for _, w := range d.Words() {
@@ -17,8 +18,10 @@ type PrefixTree struct {
 	edges map[rune]*PrefixTree
 }
 
+// Assert that a PrefixTree is also a dictionary and implements Interface.
 var _ Interface = &PrefixTree{}
 
+// Contains returns true if the provided word is contained within the prefix tree.
 func (t *PrefixTree) Contains(word string) bool {
 	wordBytes := []byte(word)
 	for len(wordBytes) > 0 {
@@ -33,6 +36,7 @@ func (t *PrefixTree) Contains(word string) bool {
 	return t.Valid
 }
 
+// Words returns a slice of all words contained within the prefix tree.
 func (t *PrefixTree) Words() (words []string) {
 	if t.Valid {
 		words = append(words, "")
@@ -46,6 +50,7 @@ func (t *PrefixTree) Words() (words []string) {
 	return words
 }
 
+// Next returns a new prefix tree, rooted at the next character.
 func (t *PrefixTree) Next(c rune) *PrefixTree {
 	if t.edges == nil {
 		return nil
@@ -53,6 +58,7 @@ func (t *PrefixTree) Next(c rune) *PrefixTree {
 	return t.edges[c]
 }
 
+// Insert inserts a new word into the prefix tree.
 func (t *PrefixTree) Insert(s string) {
 	if len(s) == 0 {
 		t.Valid = true
