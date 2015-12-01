@@ -1,5 +1,7 @@
 package dictionary
 
+import "strings"
+
 type inMemory struct {
 	words map[string]struct{}
 }
@@ -14,7 +16,7 @@ func WithWords(words ...string) Interface {
 	}
 
 	for _, w := range words {
-		dict.words[w] = struct{}{}
+		dict.words[strings.ToUpper(w)] = struct{}{}
 	}
 
 	return dict
@@ -22,6 +24,8 @@ func WithWords(words ...string) Interface {
 
 // Contains determines if the provided word is contained within the dictionary.
 func (d *inMemory) Contains(w string) bool {
+	w = strings.ToUpper(w)
+
 	_, ok := d.words[w]
 	return ok
 }
@@ -30,8 +34,8 @@ func (d *inMemory) Contains(w string) bool {
 func (d *inMemory) Words() []string {
 	words := make([]string, 0, len(d.words))
 
-	for k := range d.words {
-		words = append(words, k)
+	for w := range d.words {
+		words = append(words, w)
 	}
 
 	return words
