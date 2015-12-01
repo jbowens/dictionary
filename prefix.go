@@ -17,6 +17,35 @@ type PrefixTree struct {
 	edges map[rune]*PrefixTree
 }
 
+var _ Interface = &PrefixTree{}
+
+func (t *PrefixTree) Contains(word string) bool {
+	wordBytes := []byte(word)
+	for len(wordBytes) > 0 {
+		if t == nil {
+			return false
+		}
+
+		c, size := utf8.DecodeRune(wordBytes)
+		t = t.Next(c)
+		wordBytes = wordBytes[size:]
+	}
+	return t.Valid
+}
+
+func (t *PrefixTree) Words() (words []string) {
+	if t.Valid {
+		words = append(words, "")
+	}
+
+	for r, n := range t.edges {
+		for _, w := range n.Words() {
+			words = append(words, string(r)+w)
+		}
+	}
+	return words
+}
+
 func (t *PrefixTree) Next(c rune) *PrefixTree {
 	if t.edges == nil {
 		return nil
