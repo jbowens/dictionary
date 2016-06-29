@@ -36,5 +36,5 @@ func Load(filename string) (Interface, error) {
 		return nil, err
 	}
 
-	return WithWords(strings.Split(string(b), "\n")...), nil
+	return WithWords(strings.Split(strings.TrimSpace(string(b)), "\n")...), nil
 }
